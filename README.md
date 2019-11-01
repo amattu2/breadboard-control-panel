@@ -3,7 +3,9 @@ This was a final group project for my NWIT 101 course. It includes a simple cont
 
 # Usage
 >/web
+
 The required files for the website control panel. This directory is portable.
 
 >/server
+
 The required files for the websocket controller. 
