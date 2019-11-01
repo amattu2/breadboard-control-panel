@@ -1,0 +1,84 @@
+<!--
+Todo:
+- JavaScript websocket connection
+- Visual websocket connection status
+- Add control buttons
+-->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>LED Board Control Panel - Alec M. Shalin N.</title>
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+		<style media="screen">
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: sans-serif;
+			background: linear-gradient(rgba(242, 242, 242, 0.55), rgba(242, 242, 242, 0.55)), url(pattern.svg);
+			position: relative;
+		}
+
+		.navigation {
+			position: sticky;
+			top: 0;
+			height: 55px;
+			color: #fff;
+			background: rgb(66, 133, 244);
+			display: flex;
+			align-items: center;
+			padding: 0 20px;
+		}
+
+		.navigation .icon {
+			margin-right: 10px;
+		}
+
+		.body {
+			padding: 25px;
+			position: relative;
+			color: #3b3b3b;
+		}
+
+		.card {
+			margin: 25px auto;
+			border-radius: 3px;
+			background: #fff;
+			border: 1px solid rgba(0, 0, 0, 0.15);
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			min-height: 250px;
+			width: 1050px;
+			max-width: 95%;
+		}
+
+		.card .title {
+			font-size: 40px;
+			padding: 15px;
+			padding-top: 25px;
+			text-align: center;
+		}
+
+		.subtitle {
+			text-align: center;
+		}
+
+		</style>
+	</head>
+	<body>
+		<div class='navigation'>
+			<div class='icon'>
+				<i class='material-icons'>polymer</i>
+			</div>
+			<div class='text'>NWIT 101 - Group Project</div>
+		</div>
+		<div class='body'>
+			<div class="card">
+				<div class='title'>Press any button</div>
+				<div class='subtitle'>You should see the associated color appear on the breadboard</div>
+			</div>
+		</div>
+	</body>
+</html>
