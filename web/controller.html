@@ -1,9 +1,10 @@
 <!--
-Todo:
-- JavaScript websocket connection
-- Visual websocket connection status
-- Add control buttons
+	Produced 2019
+	By https://github.com/amattu2
+	Copy Alec M.
+	License GNU Affero General Public License v3.0
 -->
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 	<head>
@@ -61,10 +62,68 @@ Todo:
 			text-align: center;
 		}
 
-		.subtitle {
+		.card .subtitle {
 			text-align: center;
 		}
 
+		.card .card-buttons {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 0 20px;
+			margin-top: 25px;
+		}
+
+		.card .button {
+			height: 37px;
+			padding: 0px 26px;
+			border-radius: 3px;
+			transition: all 0.1s ease-in;
+			color: #fff;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 0 auto;
+			font-size: 21px;
+			text-transform: uppercase;
+		}
+
+		.card .button.red {
+			background: #e74c3c;
+		}
+
+		.card .button.blue {
+			background: #3498db;
+		}
+
+		.card .button.green {
+			background: #2ecc71;
+		}
+
+		.card .button:hover {
+			box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+		}
+
+		.websocket-status {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-left: auto;
+		}
+
+		.websocket-status .status-icon {
+			width: 14px;
+			height: 14px;
+			margin-right: 7px;
+			transition: background 0.1s ease-in;
+			border-radius: 50%;
+			background: #2ecc71;
+		}
+
+		.websocket-status .status-icon.inactive {
+			background: #e74c3c;
+		}
 		</style>
 	</head>
 	<body>
@@ -78,7 +137,79 @@ Todo:
 			<div class="card">
 				<div class='title'>Press any button</div>
 				<div class='subtitle'>You should see the associated color appear on the breadboard</div>
+				<div class='card-buttons'>
+					<div class='button red' id='button-red'>Red</div>
+					<div class='button blue' id='button-blue'>Blue</div>
+					<div class='button green' id='button-green'>Green</div>
+				</div>
+			</div>
+			<div class='websocket-status'>
+				<div class='status-icon inactive' id='websocket-status-icon'></div>
+				<div class='status-text' id='websocket-status-text'>WebSocket Inactive</div>
 			</div>
 		</div>
+		<script>
+		// Variables
+		let statusIcon = document.getElementById('websocket-status-icon');
+		let statusTxt = document.getElementById('websocket-status-text');
+		let ws = new WebSocket("ws://localhost:8443");
+
+		// Events
+		ws.onopen = function(e) {
+			statusTxt.textContent = "WebSocket Active";
+			statusIcon.classList.remove("inactive");
+		};
+		ws.onclose = function(e) {
+			statusTxt.textContent = "WebSocket Inactive";
+			statusIcon.classList.add("inactive");
+		};
+		ws.onmessage = function(e) {
+			// Checks
+			if (!e || !e.data || !parseJSON(e.data).status) { return false }
+
+			// Variables
+			let data = parseJSON(e.data);
+
+			console.log(data)
+
+			// UI
+			statusTxt.textContent = "WebSocket Active";
+			statusIcon.classList.remove("inactive");
+		};
+		document.getElementById('button-red').onclick = function() {
+			// Checks
+			if (ws.readyState !== 1) { return false }
+
+			// Send Event
+			ws.send(JSON.stringify({function: "changeColor", color: "red"}));
+		}
+		document.getElementById('button-blue').onclick = function() {
+			// Checks
+			if (ws.readyState !== 1) { return false }
+
+			// Send Event
+			ws.send(JSON.stringify({function: "changeColor", color: "blue"}));
+		}
+		document.getElementById('button-green').onclick = function() {
+			// Checks
+			if (ws.readyState !== 1) { return false }
+
+			// Send Event
+			ws.send(JSON.stringify({function: "changeColor", color: "green"}));
+		}
+
+		// Functions
+		function parseJSON(s = "") {
+			// Checks
+			if (typeof(s) !== "string") { return {} }
+
+			// Try-Catch
+			try {
+				return JSON.parse(s);
+			} catch(e) {
+				return {};
+			}
+		}
+		</script>
 	</body>
 </html>
