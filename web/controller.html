@@ -32,6 +32,7 @@
 			display: flex;
 			align-items: center;
 			padding: 0 20px;
+			z-index: 99;
 		}
 
 		.navigation .icon {
@@ -89,20 +90,81 @@
 			text-transform: uppercase;
 		}
 
-		.card .button.red {
+		.color-1 {
 			background: #e74c3c;
+			color: #fff;
+			user-select: none;
 		}
 
-		.card .button.blue {
+		.color-3 {
 			background: #3498db;
+			color: #fff;
+			user-select: none;
 		}
 
-		.card .button.green {
+		.color-2 {
 			background: #2ecc71;
+			color: #fff;
+			user-select: none;
 		}
 
 		.card .button:hover {
 			box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+		}
+
+		.card-split {
+			display: flex;
+			justify-content: center;
+			align-items: start;
+			width: 1050px;
+			margin: 0 auto;
+		}
+
+		.card-split .card {
+			width: 50%;
+			margin-top: 0;
+		}
+
+		.card-split .card:first-of-type {
+			margin-right: 5px;
+		}
+
+		.card-split .card:last-of-type {
+			margin-left: 5px;
+		}
+
+		.card-split .card .title {
+			text-align: left;
+			font-size: 24px;
+			padding: 13px;
+			padding-top: 13px;
+		}
+
+		.card .table {
+			width: 100%;
+			height: 240px;
+			overflow-y: auto;
+		}
+
+		.table .table-item {
+			display: flex;
+			align-items: center;
+			padding: 7px 0;
+			user-select: none;
+		}
+
+
+		.table .table-item > div {
+			margin: 0 auto;
+		}
+
+		.table .table-item:nth-child(odd) {
+			background: #f2f2f2;
+		}
+
+		.table .table-item span[class*="color-"] {
+			padding: 0 5px;
+			border-radius: 3px;
 		}
 
 		.websocket-status {
@@ -110,6 +172,13 @@
 			justify-content: center;
 			align-items: center;
 			margin-left: auto;
+			position: fixed;
+			right: 25px;
+			bottom: 25px;
+			background: #fff;
+			padding: 10px;
+			border-radius: 3px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 		}
 
 		.websocket-status .status-icon {
@@ -134,15 +203,30 @@
 			<div class='text'>NWIT 101 - Group Project</div>
 		</div>
 		<div class='body'>
+			<!-- Control Panel Card -->
 			<div class="card">
 				<div class='title'>Press any button</div>
 				<div class='subtitle'>You should see the associated color appear on the breadboard</div>
 				<div class='card-buttons'>
-					<div class='button red' id='button-red'>Red</div>
-					<div class='button blue' id='button-blue'>Blue</div>
-					<div class='button green' id='button-green'>Green</div>
+					<div class='button color-1' id='button-red'>Red</div>
+					<div class='button color-2' id='button-green'>Green</div>
+					<div class='button color-3' id='button-blue'>Blue</div>
 				</div>
 			</div>
+
+			<!-- Logs/Users Cards -->
+			<div class='card-split'>
+				<div class="card">
+					<div class='title'>Connected Users</div>
+					<div class='table' id='connected-users'></div>
+				</div>
+				<div class="card">
+					<div class='title'>Event Logs</div>
+					<div class='table' id='event-logs'></div>
+				</div>
+			</div>
+
+			<!-- WebSocket Status -->
 			<div class='websocket-status'>
 				<div class='status-icon inactive' id='websocket-status-icon'></div>
 				<div class='status-text' id='websocket-status-text'>WebSocket Inactive</div>
@@ -169,6 +253,10 @@
 
 			// Variables
 			let data = parseJSON(e.data);
+
+			// Router
+			if (data.logs) { parseLogs(data.logs) }
+			if (data.clients) { parseUsers(data.clients) }
 
 			console.log(data)
 
@@ -199,6 +287,14 @@
 		}
 
 		// Functions
+		function parseColor(c = "") {
+			switch(c) {
+				case "red": return 1;
+				case "green": return 2;
+				case "blue": return 3;
+				default: return 0;
+			}
+		}
 		function parseJSON(s = "") {
 			// Checks
 			if (typeof(s) !== "string") { return {} }
@@ -209,6 +305,68 @@
 			} catch(e) {
 				return {};
 			}
+		}
+		function parseDate(d, timeOnly = true) {
+			// Variables
+			let match = d.match(/^(\d+)-(\d+)-(\d+) (\d+)\:(\d+)\:(\d+)$/);
+			let date = new Date(match[1], match[2] - 1, match[3], match[4], match[5], match[6]);
+			let hours = date.getHours();
+			let minutes = date.getMinutes();
+			let seconds = date.getSeconds();
+
+			// Format
+			if (timeOnly) {
+				return ((hours - 12) > 0 ? hours - 12 : hours) + ":" + minutes + ":" + (seconds < 10 ? "0" + seconds : seconds) + (hours - 12 >= 0 ? "pm" : "am")
+			}
+		}
+		function parseLogs(d) {
+			// Checks
+			if (!d || typeof(d) !== "object") { return false }
+
+			// Variables
+			let fragment = document.createDocumentFragment();
+
+			// Loops
+			d.forEach(function(e, i) {
+				// Variables
+				let div = document.createElement("div");
+				let message = `${e.client} changed the color to <span class='color-${parseColor(e.color)}'>${e.color}</span>`;
+
+				// Attributes
+				div.classList.add("table-item");
+				div.innerHTML = `<div class='item-icon'>#${i+1}</div><div class='item-label'>${message}</div><div class='item-date'>${parseDate(e.timestamp)}</div>`;
+
+				// Append
+				fragment.appendChild(div);
+			});
+
+			// Append
+			document.getElementById('event-logs').innerHTML = '';
+			document.getElementById('event-logs').appendChild(fragment);
+		}
+		function parseUsers(d) {
+			// Checks
+			if (!d || typeof(d) !== "object") { return false }
+
+			// Variables
+			let fragment = document.createDocumentFragment();
+
+			// Loops
+			d.forEach(function(e, i) {
+				// Variables
+				let div = document.createElement("div");
+
+				// Attributes
+				div.classList.add("table-item");
+				div.innerHTML = `<div class='item-icon'>#${i+1}</div><div class='item-label'>${e.address}</div><div class='item-date'>${parseDate(e.timestamp)}</div>`;
+
+				// Append
+				fragment.appendChild(div);
+			});
+
+			// Append
+			document.getElementById('connected-users').innerHTML = '';
+			document.getElementById('connected-users').appendChild(fragment);
 		}
 		</script>
 	</body>
