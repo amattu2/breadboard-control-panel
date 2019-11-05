@@ -9,6 +9,7 @@ from hashlib import sha1
 import logging
 from socket import error as SocketError
 import errno
+from datetime import datetime
 
 if sys.version_info[0] < 3:
     from SocketServer import ThreadingMixIn, TCPServer, StreamRequestHandler
@@ -136,7 +137,8 @@ class WebsocketServer(ThreadingMixIn, TCPServer, API):
         client = {
             'id': self.id_counter,
             'handler': handler,
-            'address': handler.client_address
+            'address': handler.client_address,
+            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         self.clients.append(client)
         self.new_client(client, self)
@@ -158,6 +160,9 @@ class WebsocketServer(ThreadingMixIn, TCPServer, API):
         for client in self.clients:
             if client['handler'] == handler:
                 return client
+
+    def get_clients(self):
+        return self.clients
 
 
 class WebSocketHandler(StreamRequestHandler):

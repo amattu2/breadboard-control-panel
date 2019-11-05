@@ -12,13 +12,23 @@
 		0003: New Color
 '''
 
+'''
+	Todo:
+	- Beep x2 for user connects
+	- Beep x1 for user disconnect
+	- Handle LEDs
+	- Implement "activeColor" and broadcast that with all events
+'''
+
 # Imports
 import json
-from assets.wsserver import WebsocketServer
-from assets.wsserver import OPCODE_CLOSE_CONN
+from assets.wsserver import WebsocketServer, OPCODE_CLOSE_CONN
+from datetime import datetime
 
 # Variables
 server = WebsocketServer(8443)
+logs = []
+colors = {"red": 1, "green": 2, "blue": 3}
 
 # Handlers
 def connect(client, server):
@@ -28,7 +38,7 @@ def connect(client, server):
 
 	# Notice
 	print('[NOTICE] Client Connected: #{0}'.format(client['id']))
-	broadcast(server, {"status": "0001", "client": client['id']})
+	broadcast(server, {"status": "0001", "client": client['id'], "clients": getClients(server), "logs": logs})
 
 def disconnect(client, server):
 	# Checks
@@ -44,6 +54,23 @@ def disconnectClient(client):
 
 	# Close
 	client['handler'].send_text("", opcode = OPCODE_CLOSE_CONN)
+
+def getClients(server):
+	# Checks
+	if (not server): return False
+
+	# Variables
+	clients = []
+
+	# Loops
+	for client in server.get_clients():
+		clients.append({"address": "{0}:{1}".format(client["address"][0], client["address"][1]), "timestamp": client["timestamp"]})
+
+	# Return
+	return clients
+
+def log(color, client):
+	logs.append({"color": color, "client": "{0}:{1}".format(client["address"][0], client["address"][1]), "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
 
 def broadcast(server, message = {}):
 	# Checks
@@ -77,10 +104,26 @@ def navigator(client, server, message):
 
 	# Navigator
 	if (message['function'] == 'changeColor'):
-		print("Change color")
-		broadcast(server, {"status": "0003", "client": client['id'], "color": "TBD"})
+		# Variables
+		result = changeColor(message, client)
+
+		# Checks
+		if (result == True):
+			broadcast(server, {"status": "0003", "client": client['id'], "color": message["color"], "logs": logs})
 	else:
 		return False
+
+# Change Color
+def changeColor(message, client):
+	# Checks
+	if (not message): return False
+	if (not client): return False
+	if (not 'color' in message or not message['color'] in colors): return False
+
+	# Success
+	log(message['color'], client)
+	print("New Color: {0} [#{1}]".format(message['color'], colors[message['color']]))
+	return True
 
 # Properties
 server.set_fn_new_client(connect)
