@@ -9,3 +9,6 @@ The required files for the website control panel. This directory is portable.
 >/server
 
 The required files for the websocket controller. 
+
+# Previews
+![preview image](https://github.com/amattu2/website-control-panel/blob/master/demo/control-panel.png?raw=true)
