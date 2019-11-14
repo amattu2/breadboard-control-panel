@@ -134,7 +134,7 @@
 		}
 
 		.color-3 {
-			background: #3498db;
+			background: #f1c40f;
 			color: #fff;
 			user-select: none;
 		}
@@ -309,7 +309,7 @@
 				<div class='card-buttons'>
 					<div class='button color-1' id='button-red'>Red</div>
 					<div class='button color-2' id='button-green'>Green</div>
-					<div class='button color-3' id='button-blue'>Blue</div>
+					<div class='button color-3' id='button-yellow'>Yellow</div>
 				</div>
 			</div>
 
@@ -370,12 +370,12 @@
 			// Send Event
 			ws.send(JSON.stringify({function: "changeColor", color: "red"}));
 		}
-		document.getElementById('button-blue').onclick = function() {
+		document.getElementById('button-yellow').onclick = function() {
 			// Checks
 			if (ws.readyState !== 1) { return false }
 
 			// Send Event
-			ws.send(JSON.stringify({function: "changeColor", color: "blue"}));
+			ws.send(JSON.stringify({function: "changeColor", color: "yellow"}));
 		}
 		document.getElementById('button-green').onclick = function() {
 			// Checks
@@ -390,7 +390,7 @@
 			switch(c) {
 				case "red": return 1;
 				case "green": return 2;
-				case "blue": return 3;
+				case "yellow": return 3;
 				default: return 0;
 			}
 		}
