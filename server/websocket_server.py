@@ -16,7 +16,6 @@
 	Todo:
 	- Beep x2 for user connects
 	- Beep x1 for user disconnect
-	- Handle LEDs
 	- Implement "activeColor" and broadcast that with all events
 '''
 
@@ -24,11 +23,14 @@
 import json
 from assets.wsserver import WebsocketServer, OPCODE_CLOSE_CONN
 from datetime import datetime
+from gpiozero import LED
 
 # Variables
 server = WebsocketServer(8443)
 logs = []
-colors = {"red": 1, "green": 2, "blue": 3}
+colors = {"red": 1, "green": 2, "yellow": 3}
+leds = {"1": LED(2), "2": LED(3), "3": LED(4)}
+piezo = LED(14)
 
 # Handlers
 def connect(client, server):
@@ -120,7 +122,12 @@ def changeColor(message, client):
 	if (not client): return False
 	if (not 'color' in message or not message['color'] in colors): return False
 
+	# Loops
+	for led in leds:
+		leds[led].off()
+
 	# Success
+	leds[str(colors[message['color']])].on()
 	log(message['color'], client)
 	print("New Color: {0} [#{1}]".format(message['color'], colors[message['color']]))
 	return True
