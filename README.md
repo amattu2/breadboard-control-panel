@@ -12,3 +12,4 @@ The required files for the websocket controller.
 
 # Previews
 ![preview image](https://github.com/amattu2/website-control-panel/blob/master/demo/control-panel.png?raw=true)
+![preview image](https://github.com/amattu2/website-control-panel/blob/master/demo/breadboard-raspberrypi.JPG?raw=true)
