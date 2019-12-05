@@ -135,6 +135,107 @@
 		[data-tooltip][data-tooltip-open-left]:hover:before {
 			transform-origin: left center 0;
 		}
+
+		.card {
+			background: #fff;
+			border-radius: 3px;
+			margin: 10px auto;
+			max-width: 97%;
+			width: 850px;
+			border: 1px solid rgba(0, 0, 0, 0.15);
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+
+		.card-title {
+			padding: 10px;
+			color: #3b3b3b;
+			font-size: 18px;
+			border-bottom: 1px solid #e2e2e2
+		}
+
+		.card-body {
+			padding: 15px 10px;
+		}
+
+		.profile-cards {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.profile-card {
+			margin: 0 auto;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+			background: #fff;
+			position: relative;
+			user-select: none;
+			width: 300px;
+		}
+
+		.profile-card-name {
+			color: #262626;
+			font-size: 26px;
+			text-align: center;
+			font-weight: bold;
+		}
+
+		.profile-card-title {
+			color: #3b3b3b;
+			font-size: 17px;
+			text-align: center;
+			margin-top: 4px;
+			opacity: 0.7;
+		}
+
+		.profile-card-details {
+			width: 100%;
+			background: #51237f;
+			box-sizing: border-box;
+			border-radius: 0 0 6px 6px;
+			color: #fff;
+			padding: 5px;
+			margin-top: 10px;
+		}
+
+		.profile-card-image img {
+			border-radius: 6px 6px 0 0;
+		}
+
+		.card-todo {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			box-sizing: border-box;
+			border: 1px solid #f2f2f2;
+			border-radius: 3px;
+			background: #2ecc71;
+			color: #fff;
+			user-select: none;
+			margin: 3px 0;
+		}
+
+		.card-todo.failed {
+			background: #FF9800;
+		}
+
+		.card-todo-icon {
+			margin-left: auto;
+			padding: 4px;
+			padding-right: 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border-radius: 0 3px 3px 0;
+		}
+
+		.card-todo-title {
+			margin-left: 10px;
+		}
+
+		.card-todo-icon i.material-icons {
+			margin-right: 6px;
+		}
 		</style>
 	</head>
 	<body>
@@ -144,16 +245,121 @@
 			</div>
 			<div class='text'>NWIT 101 - Team Project</div>
 			<div class='logos'>
-				<div class='logo' data-tooltip="Alec M. (Developer)">
-					<span>AM</span>
+				<div class='logo' data-tooltip="Project Member Name (Developer)">
+					<span>PM</span>
 				</div>
-				<div class='logo' data-tooltip="Shalin N. (Design)">
-					<span>SN</span>
+				<div class='logo' data-tooltip="Project Member Name (Design)">
+					<span>PM</span>
 				</div>
 			</div>
 		</div>
 		<div class='body'>
-
+			<div class='card'>
+				<div class='card-title'>The Concept</div>
+				<div class='card-body'>
+					To demonstrate the ability to implement bi-directional communication between a website based control panel and a Raspberry Pi powered circuit board.
+				</div>
+			</div>
+			<div class='card'>
+				<div class='card-title'>The Details</div>
+				<div class='card-body'>
+					<b>Project Title</b>: Web Based Breadboard<br/><br/>
+					<b>Project Purpose</b>: (See "The Concept" above)<br/><br/>
+					<b>Project Features</b>: To control LEDs from a "remote" controller website, and also demonstrate bi-directional communication.<br/><br/>
+					<b>Project Materials</b>: (See "Project Proposal" in BlackBoard)<br/><br/>
+					<b>Project Development History</b>: (See "The Tasks" below and "Journal" in BlackBoard)<br/><br/>
+					<b>Lesson Learned</b>: It's a matter of trial-and-error when building circuits and code. It requires constant tweaking to produce a successful result.<br/><br/>
+					<b>Future Plan</b>: To implement the Pizeospeaker and different LED colors.
+				</div>
+			</div>
+			<div class='card'>
+				<div class='card-title'>The Team</div>
+				<div class='card-body'>
+					<div class='profile-cards'>
+						<div class='profile-card'>
+							<div class='profile-card-image'>
+								<img src='https://via.placeholder.com/300x200' />
+							</div>
+							<div class='profile-card-text'>
+								<div class='profile-card-name'>Project Member Name</div>
+								<div class='profile-card-title'>Developer</div>
+								<div class='profile-card-details'>College Name, 2019</div>
+							</div>
+						</div>
+						<div class='profile-card'>
+							<div class='profile-card-image'>
+								<img src='https://via.placeholder.com/300x200' />
+							</div>
+							<div class='profile-card-text'>
+								<div class='profile-card-name'>Project Member Name</div>
+								<div class='profile-card-title'>Documentation, Design</div>
+								<div class='profile-card-details'>College Name, 2019</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='card'>
+				<div class='card-title'>The Tasks</div>
+				<div class='card-body'>
+					<div class='card-todo'>
+						<div class='card-todo-title'>Draft code design</div>
+						<div class='card-todo-icon'>
+							<i class='material-icons'>check</i>
+							Complete (10/23/2019)
+						</div>
+					</div>
+					<div class='card-todo'>
+						<div class='card-todo-title'>Draft control panel design</div>
+						<div class='card-todo-icon'>
+							<i class='material-icons'>check</i>
+							Complete (10/24/2019)
+						</div>
+					</div>
+					<div class='card-todo'>
+						<div class='card-todo-title'>Finish control panel (HTML) design</div>
+						<div class='card-todo-icon'>
+							<i class='material-icons'>check</i>
+							Complete (10/31/2019)
+						</div>
+					</div>
+					<div class='card-todo'>
+						<div class='card-todo-title'>Finish websocket (Python) code</div>
+						<div class='card-todo-icon'>
+							<i class='material-icons'>check</i>
+							Complete (11/01/2019)
+						</div>
+					</div>
+					<div class='card-todo'>
+						<div class='card-todo-title'>Finish breadboard circuit</div>
+						<div class='card-todo-icon'>
+							<i class='material-icons'>check</i>
+							Complete (11/19/2019)
+						</div>
+					</div>
+					<div class='card-todo failed'>
+						<div class='card-todo-title'>Implement pizeospeaker on circuit board</div>
+						<div class='card-todo-icon'>
+							<i class='material-icons'>warning</i>
+							Failed (11/19/2019)
+						</div>
+					</div>
+					<div class='card-todo'>
+						<div class='card-todo-title'>Finish project testing</div>
+						<div class='card-todo-icon'>
+							<i class='material-icons'>check</i>
+							Complete (11/19/2019)
+						</div>
+					</div>
+					<div class='card-todo'>
+						<div class='card-todo-title'>Finish project documentation</div>
+						<div class='card-todo-icon'>
+							<i class='material-icons'>check</i>
+							Complete (12/4/2019)
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
